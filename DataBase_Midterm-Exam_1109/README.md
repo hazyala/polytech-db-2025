@@ -15,4 +15,4 @@ view는 DeleteCustomerVirew 와 UpDateCustomerView 클래스만 추가로 제작
 
 IDE에서 이 폴더를 Java 프로젝트로 열고 src를 source root로 지정한다. Oracle JDBC driver와 코드 상수에 맞는 DB 계정·customer/orders 테이블이 필요하다. 전체 테이블을 자동 생성하는 migration이나 공통 Maven/Gradle 빌드는 없다. 준비 후 `mvc_jdbc_test.controller.MainController.main`을 실행한다.
 
-DB 없이 독립 실행되는 프로그램은 아니다. 이 README 정비에서는 연결 값·SQL·entity를 변경하지 않았다.
+DB 없이 독립 실행되는 프로그램은 아니다.
