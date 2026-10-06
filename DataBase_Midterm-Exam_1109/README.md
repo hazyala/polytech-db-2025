@@ -1,18 +1,29 @@
-# JDBC 고객 관리 중간 과제
+# JDBC 고객·주문 관리
 
-Scanner로 메뉴를 입력받아 고객·주문 조회와 고객 추가·수정·삭제를 처리한다.
+Java 콘솔 메뉴에서 Oracle DB의 고객을 조회·추가·수정·삭제하고 주문 목록을 확인하는 중간 과제.
 
-## 과제 당시 기록
+## 구현한 부분
 
-Main Controller에서 구조를 siwtch case문으로 변환하여 편리하게 고객 정보 조회, 수정, 삭제, 추가를 할 수 있도록 수정하였습니다. MainController의 하단부에 //===================================== 중간 과제 ============================================ 로 적혀있는 구간부터 새로 수행한 내용입니다.
-entity는 수업내용때 제작 한 내용 그대로 사용하였습니다.
-view는 DeleteCustomerVirew 와 UpDateCustomerView 클래스만 추가로 제작하여 수행하였습니다.
+수업에서 만든 `Customer`·`Order` entity와 조회 화면을 사용하고, `MainController`의 메뉴를 switch 분기로 구성했다. 수정 입력을 받는 `UpdateCustomerView`, 삭제 확인과 관리자 비밀번호를 받는 `DeleteCustomerView`를 추가했다.
 
+- **고객 수정**: ID로 고객을 조회하고 현재 정보를 표시한 다음, 입력한 이름·나이·등급·직업·적립금을 `UPDATE`한다. 수정 후 같은 ID를 다시 조회해 결과를 출력한다.
+- **고객 삭제**: 대상 확인과 Y/N 입력을 거쳐 `DELETE`한다. 주문 참조 때문에 Oracle 오류 2292가 발생하면 관리자 비밀번호 확인 경로로 이동한다. 비밀번호는 코드에 고정된 과제용 값이다.
+- **주문이 있는 고객 삭제**: `DeleteCustomerAll`이 auto-commit을 끄고 주문 → 고객 순서로 삭제한다. 두 작업이 끝나면 commit, SQL 오류가 나면 rollback하며 마지막에 auto-commit을 복구한다.
+- **주문 조회**: 주문·고객·제품 테이블을 join하고 고객 이름·제품명·수량·배송지를 출력한다.
 
-## 현재 코드 경로
+## 입력에서 DB까지
 
-`mvc_jdbc_test.controller.MainController`가 switch 분기와 SQL 실행을 맡고, `entity/`는 Customer·Order, `view/`는 콘솔 표시와 입력을 처리한다. `jdbc_test.JDBC_Connecter`가 Oracle driver를 로드하고 localhost:1521/xe에 연결한다. DAO 계층이 별도로 있다고 가정하지 않는다.
+`Scanner` 메뉴 입력 → `MainController`의 switch → View 입력 → `PreparedStatement` SQL → View 결과 출력 순서다. SQL 실행은 Controller 안에 있으며 `findCustomerById`를 수정·삭제 경로에서 함께 사용한다.
 
-IDE에서 이 폴더를 Java 프로젝트로 열고 src를 source root로 지정한다. Oracle JDBC driver와 코드 상수에 맞는 DB 계정·customer/orders 테이블이 필요하다. 전체 테이블을 자동 생성하는 migration이나 공통 Maven/Gradle 빌드는 없다. 준비 후 `mvc_jdbc_test.controller.MainController.main`을 실행한다.
+| 위치 | 역할 |
+|---|---|
+| [MainController](src/mvc_jdbc_test/controller/MainController.java) | 메뉴 분기, 조회·CRUD, 삭제 트랜잭션 |
+| [view](src/mvc_jdbc_test/view/) | 콘솔 목록·입력·확인 메시지 |
+| [entity](src/mvc_jdbc_test/entity/) | 고객·주문 결과를 담는 Java 객체 |
+| [JDBC_Connecter](src/jdbc_test/JDBC_Connecter.java) | Oracle driver와 Connection 생성 |
 
-DB 없이 독립 실행되는 프로그램은 아니다.
+## 실행
+
+IDE에서 이 폴더를 열고 `src/`를 source root로 지정한다. Oracle JDBC driver를 classpath에 추가하고, `JDBC_Connecter`의 `localhost:1521/xe`와 계정 설정에 맞는 DB를 준비한다. 프로그램은 `고객`·`주문`·`제품` 테이블을 사용한다. 테이블과 seed 데이터 SQL은 [0825.sql](../DB_2025_2/0825.sql)에 있다.
+
+`mvc_jdbc_test.controller.MainController.main`을 실행한 뒤 1~5번 메뉴를 선택한다. 0번은 종료다. 공통 Maven/Gradle 빌드나 DB migration은 없다.
