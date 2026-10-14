@@ -6,6 +6,7 @@ Oracle SQL 수업 기록, 온라인몰 DB 설계 산출물과 콘솔 고객 관�
 |---|---|
 | `DB_2025_2/*.sql` | 날짜별 SQL 실습 |
 | `DB_2025_2/`의 drawio XML·PNG | 온라인몰 개념·논리·테이블 설계 산출물 |
+| [한빛마트 온라인몰 논리 설계](DB_2025_2/한빛마트%20온라인몰_3.논리적%20설계.drawio.png) | 회원·상품·제조업체·게시글·주문의 릴레이션 |
 | [DataBase_Midterm-Exam_1109](DataBase_Midterm-Exam_1109/README.md) | 고객·주문 조회, 고객 추가·수정·삭제 |
 
 중간 과제는 Java 콘솔 입력을 MainController의 switch로 분기해 JDBC 쿼리와 View에 연결한다. 메뉴 분기와 수정·삭제 View를 추가했고, 주문이 있는 고객을 삭제할 때 주문과 고객 삭제를 하나의 트랜잭션으로 묶었다. entity는 수업 코드를 사용했다.
